@@ -2,35 +2,26 @@ plugins {
     id 'java'
 }
 
-group = 'blockchain'
+group 'org.paco.blockchain'
 version '1.0-SNAPSHOT'
-sourceCompatibility = '11'
-
-//dependencies {
-//    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-//    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-//}
+sourceCompatibility = 11
 
 repositories {
     mavenCentral()
+    // HYPERSKILL
     maven { url "https://jitpack.io" }
 }
 
-sourceSets.main.resources.srcDirs = ["main/resources"]
+sourceSets.main.resources.srcDirs = ["src/main/resources"]
 
 dependencies {
-    // LOMBOK - ANNOTATIONS
-    testCompileOnly 'org.projectlombok:lombok:1.18.20'
-    compileOnly 'org.projectlombok:lombok:1.18.20'
-    annotationProcessor 'org.projectlombok:lombok:1.18.20'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
     // HYPERSKILL
     testImplementation 'com.github.hyperskill:hs-test:release-SNAPSHOT'
 }
 
 test {
-//	useJUnitPlatform()
-    systemProperty "file.encoding", "utf-8"
+    useJUnitPlatform()
 }
-
-

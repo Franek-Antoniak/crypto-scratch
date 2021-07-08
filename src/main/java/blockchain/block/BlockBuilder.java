@@ -1,12 +1,15 @@
 package blockchain.block;
 
 import blockchain.util.StringUtil;
+import lombok.Data;
 
 import java.util.Date;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Builder pattern to encapsulate creating a Block.
  */
+@Data
 public class BlockBuilder {
     private long index;
     private long timeStamp;
@@ -14,6 +17,8 @@ public class BlockBuilder {
     private String hash;
     /* Sha256 hash of previous Block in a BlockChain */
     private String previousHash;
+    private long magicNumber;
+    private long generatingTime;
 
     /**
      * Generate new Index by adding one to the previousIndex
@@ -36,7 +41,17 @@ public class BlockBuilder {
     }
 
     public BlockBuilder generateHash() {
-        hash = StringUtil.applySha256(index + timeStamp + hash + previousHash);
+        hash = StringUtil.applySha256(index + timeStamp + previousHash + magicNumber);
+        return this;
+    }
+
+    public BlockBuilder setMagicNumber(long magicNumber) {
+        this.magicNumber = magicNumber;
+        return this;
+    }
+
+    public BlockBuilder setGeneratingTime(long generatingTime) {
+        this.generatingTime = generatingTime;
         return this;
     }
 
@@ -48,6 +63,6 @@ public class BlockBuilder {
     }
 
     public Block build() {
-        return new Block(index, timeStamp, hash, previousHash);
+        return new Block(index, timeStamp, hash, previousHash, magicNumber, generatingTime);
     }
 }

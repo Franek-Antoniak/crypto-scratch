@@ -29,6 +29,6 @@ public class Block {
                 "Magic number: " + magicNumber + '\n' +
                 "Hash of the previous block:\n" + previousHash + '\n' +
                 "Hash of the block:\n" + hash + '\n' +
-                "Block was generating for: \n" + generatingTime + " seconds" + '\n';
+                "Block was generating for: " + generatingTime + " seconds" + '\n';
     }
 }

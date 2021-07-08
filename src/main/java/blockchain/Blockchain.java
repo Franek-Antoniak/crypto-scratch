@@ -15,7 +15,6 @@ import java.util.NoSuchElementException;
 public class Blockchain {
     /* List that contains Block with info */
     private final LinkedList<Block> blockList = new LinkedList<>();
-    private final BlockFactory blockFactory = new BlockFactory();
 
     public void addNewBlock(Block newBlock) {
         blockList.add(newBlock);

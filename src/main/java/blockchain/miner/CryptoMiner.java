@@ -14,7 +14,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CryptoMiner {
     private final Blockchain blockchain;
-    private final BlockFactory blockFactory = new BlockFactory();
+    private final CryptoMinerTools cryptoMinerTools;
+    private final BlockFactory blockFactory;
+
+    public CryptoMiner(Blockchain blockchain, long magicNumber) {
+        this.blockchain = blockchain;
+        cryptoMinerTools = new CryptoMinerTools(magicNumber);
+        blockFactory = new BlockFactory(cryptoMinerTools);
+    }
 
     public void mineBlocks(long amountToMine) {
         for (int i = 0; i < amountToMine; i++) {

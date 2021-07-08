@@ -6,11 +6,6 @@ group = 'blockchain'
 version '1.0-SNAPSHOT'
 sourceCompatibility = '11'
 
-//dependencies {
-//    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-//    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-//}
-
 repositories {
     mavenCentral()
     maven { url "https://jitpack.io" }
@@ -26,6 +21,8 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
     // HYPERSKILL
     testImplementation 'com.github.hyperskill:hs-test:release-SNAPSHOT'
+    // JSON OBJECT MAPPER
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
 }
 
 test {

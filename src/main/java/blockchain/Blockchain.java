@@ -2,6 +2,7 @@ package blockchain;
 
 import blockchain.block.Block;
 import blockchain.block.BlockFactory;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 
 import java.util.Iterator;
@@ -20,7 +21,7 @@ public class Blockchain {
         blockList.add(newBlock);
     }
 
-    // FIXME: 06.07.2021 Don't know yet if it's good idea.
+    @JsonIgnore
     public Block getLastBlock() {
         try {
             return blockList.getLast();

@@ -2,6 +2,7 @@ package blockchain;
 
 import blockchain.block.Block;
 import blockchain.block.BlockFactory;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 
 import java.util.Iterator;
@@ -15,13 +16,12 @@ import java.util.NoSuchElementException;
 public class Blockchain {
     /* List that contains Block with info */
     private final LinkedList<Block> blockList = new LinkedList<>();
-    private final BlockFactory blockFactory = new BlockFactory();
 
     public void addNewBlock(Block newBlock) {
         blockList.add(newBlock);
     }
 
-    // FIXME: 06.07.2021 Don't know yet if it's good idea.
+    @JsonIgnore
     public Block getLastBlock() {
         try {
             return blockList.getLast();

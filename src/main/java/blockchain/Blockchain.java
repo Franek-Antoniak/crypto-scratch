@@ -1,33 +1,55 @@
 package blockchain;
 
 import blockchain.block.Block;
-import blockchain.block.BlockFactory;
+import blockchain.block.util.BlockUtil;
+import blockchain.mine.CryptoMine;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  * Represents a Blockchain.
  */
-@Getter
+@Setter
 public class Blockchain {
     /* List that contains Block with info */
     private final LinkedList<Block> blockList = new LinkedList<>();
+    @JsonIgnore
+    private final CryptoMine cryptoMinerMine = CryptoMine.getInstance();
 
-    public void addNewBlock(Block newBlock) {
-        blockList.add(newBlock);
+    private Blockchain() {
+    }
+
+    private static class BlockChainSingleton {
+        private static final Blockchain instance = new Blockchain();
+    }
+
+    public static Blockchain getInstance() {
+        return BlockChainSingleton.instance;
+    }
+
+    public synchronized void tryAddNewBlock(Block newBlock, Optional<Block> lastBlock) {
+        if (lastBlock.equals(getLastBlock()) && BlockUtil.isEnoughZeroInHash(newBlock.getHash(), newBlock.getAmountOfZeros())) {
+            blockList.add(newBlock);
+            cryptoMinerMine.stopMining();
+        }
     }
 
     @JsonIgnore
-    public Block getLastBlock() {
+    public Optional<Block> getLastBlock() {
         try {
-            return blockList.getLast();
+            return Optional.of(blockList.getLast());
         } catch (NoSuchElementException e) {
-            return null;
+            return Optional.empty();
         }
+    }
+
+    public int sizeOfBlockchain() {
+        return blockList.size();
     }
 
     /**
@@ -38,7 +60,7 @@ public class Blockchain {
      * @return a string representation of Blockchain
      */
     @Override
-    public String toString() {
+    public synchronized String toString() {
         Iterator<Block> it = blockList.iterator();
         if (!it.hasNext())
             return "";

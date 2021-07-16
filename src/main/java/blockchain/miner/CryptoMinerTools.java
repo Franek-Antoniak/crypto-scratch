@@ -1,32 +1,38 @@
 package blockchain.miner;
 
+import blockchain.block.Block;
 import blockchain.block.BlockBuilder;
+import blockchain.block.util.BlockUtil;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.concurrent.ThreadLocalRandom;
 
 @RequiredArgsConstructor
 public class CryptoMinerTools {
-    private final long numberOfZeros;
+    private volatile boolean active = true;
 
-    public long findMagicNumber(BlockBuilder blockBuilder) {
+    public Block mineBlock(BlockBuilder blockBuilder) {
         long startTime = new Date().getTime();
         long randomNumber;
         do {
             randomNumber = ThreadLocalRandom.current()
                     .nextLong(Long.MAX_VALUE);
-            blockBuilder.setMagicNumber(randomNumber);
-            blockBuilder.generateHash();
-        } while (!isEnoughZeroInHash(blockBuilder.getHash()));
+            blockBuilder.setMagicNumber(randomNumber)
+                    .generateHash();
+        } while (!BlockUtil.isEnoughZeroInHash(blockBuilder.getHash(), blockBuilder.getAmountOfZeros()) && active);
         long secondsOfGenerating = (new Date().getTime() - startTime) / 1000;
-        blockBuilder.setGeneratingTime(secondsOfGenerating);
-        return randomNumber;
+        blockBuilder.setGeneratingTime(secondsOfGenerating)
+                .setAuthor(Thread.currentThread()
+                        .getId());
+        return blockBuilder.build();
     }
 
-    public boolean isEnoughZeroInHash(String hash) {
-        String regex = String.format("\\b0{%d}.*", numberOfZeros);
-        return hash.matches(regex);
+    public void turnOff() {
+        active = false;
+    }
+
+    public void turnOn() {
+        active = true;
     }
 }

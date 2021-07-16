@@ -4,7 +4,6 @@ import blockchain.util.StringUtil;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Builder pattern to encapsulate creating a Block.
@@ -19,6 +18,8 @@ public class BlockBuilder {
     private String previousHash;
     private long magicNumber;
     private long generatingTime;
+    private long authorId;
+    private long amountOfZeros;
 
     /**
      * Generate new Index by adding one to the previousIndex
@@ -41,7 +42,9 @@ public class BlockBuilder {
     }
 
     public BlockBuilder generateHash() {
-        hash = StringUtil.applySha256(index + timeStamp + previousHash + magicNumber);
+        hash =
+                StringUtil.applySha256(
+                        String.valueOf(index) + String.valueOf(timeStamp) + previousHash + String.valueOf(magicNumber));
         return this;
     }
 
@@ -55,6 +58,20 @@ public class BlockBuilder {
         return this;
     }
 
+    public BlockBuilder setAuthor(long authorId) {
+        this.authorId = authorId;
+        return this;
+    }
+
+    public BlockBuilder changeAmountOfZeros(long amountOfZerosOfPrevious, long generatingTimeOfPrevious) {
+        this.amountOfZeros = amountOfZerosOfPrevious;
+        if(generatingTimeOfPrevious > 60)
+            this.amountOfZeros--;
+        if(generatingTimeOfPrevious < 5)
+            this.amountOfZeros++;
+        return this;
+    }
+
     public void reset() {
         index = -1;
         timeStamp = 0;
@@ -63,6 +80,6 @@ public class BlockBuilder {
     }
 
     public Block build() {
-        return new Block(index, timeStamp, hash, previousHash, magicNumber, generatingTime);
+        return new Block(index, timeStamp, hash, previousHash, magicNumber, generatingTime, authorId, amountOfZeros);
     }
 }

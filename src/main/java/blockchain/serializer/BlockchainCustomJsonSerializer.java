@@ -1,6 +1,7 @@
 package blockchain.serializer;
 
 import blockchain.Blockchain;
+import blockchain.block.Block;
 import blockchain.block.BlockBuilder;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Optional;
 
 public class BlockchainCustomJsonSerializer extends StdDeserializer<Blockchain> {
 
@@ -26,7 +28,7 @@ public class BlockchainCustomJsonSerializer extends StdDeserializer<Blockchain> 
     @Override
     public Blockchain deserialize(JsonParser parser, DeserializationContext deserializer)
             throws IOException {
-        Blockchain blockchain = new Blockchain();
+        Blockchain blockchain = Blockchain.getInstance();
         ObjectCodec codec = parser.getCodec();
         JsonNode node = codec.readTree(parser);
 
@@ -36,7 +38,8 @@ public class BlockchainCustomJsonSerializer extends StdDeserializer<Blockchain> 
                 new TypeReference<>() {
                 });
         for (var dto : dtoLinkedList) {
-            blockchain.addNewBlock(dto.build());
+            Optional<Block> lastBlock = blockchain.getLastBlock();
+            blockchain.tryAddNewBlock(dto.build(), lastBlock);
         }
         return blockchain;
     }

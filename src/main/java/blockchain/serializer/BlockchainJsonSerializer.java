@@ -37,7 +37,7 @@ public class BlockchainJsonSerializer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new Blockchain();
+        return Blockchain.getInstance();
     }
 
 

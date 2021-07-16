@@ -23,6 +23,10 @@ dependencies {
     testImplementation 'com.github.hyperskill:hs-test:release-SNAPSHOT'
     // JSON OBJECT MAPPER
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
+    // OBJECT MAPPER
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+
 }
 
 test {

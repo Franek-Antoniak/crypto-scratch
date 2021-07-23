@@ -3,24 +3,16 @@ package blockchain.mine;
 import blockchain.miner.CryptoMiner;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.stream.Stream;
 
 @Data
 public class CryptoMine {
-    private List<CryptoMiner> cryptoMiners;
+    private Set<CryptoMiner> cryptoMiners;
 
     private CryptoMine() {
-        cryptoMiners = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            cryptoMiners.add(new CryptoMiner());
-        }
-    }
-
-    public void stopMining() {
-        for (var cryptoMiner : cryptoMiners) {
-            cryptoMiner.turnOffMining();
-        }
+        cryptoMiners = new ConcurrentSkipListSet<>(Comparator.comparing(CryptoMiner::getId));
     }
 
     private static class CryptoMinerMineSingleton {
@@ -31,15 +23,38 @@ public class CryptoMine {
         return CryptoMinerMineSingleton.instance;
     }
 
-    public void shutdown() {
-        for (var cryptoMiner : cryptoMiners) {
-            cryptoMiner.turnOffMiner();
-        }
+    public int addMiners(int amountOfMiners) {
+        int currentAmountOfMainers = cryptoMiners.size();
+        amountOfMiners = Math.min(amountOfMiners, Runtime.getRuntime()
+                .availableProcessors() - currentAmountOfMainers);
+        System.out.println("Adding " + amountOfMiners + " crypto miners!");
+        Stream.generate(CryptoMiner::new)
+                .limit(amountOfMiners)
+                .forEach(cryptoMiner -> {
+                    cryptoMiners.add(cryptoMiner);
+                    cryptoMiner.start();
+                });
+        return amountOfMiners;
     }
 
-    public void startMining() {
-        for (CryptoMiner cryptoMiner : cryptoMiners) {
-            cryptoMiner.start();
-        }
+    public synchronized int removeMiners(int amountOfMiners) {
+        int currentAmountOfMainers = cryptoMiners.size();
+        amountOfMiners = Math.min(amountOfMiners, currentAmountOfMainers);
+        System.out.println("Removing " + amountOfMiners + " crypto miners.");
+        cryptoMiners.forEach(cryptoMiner -> {
+            cryptoMiner.turnOffMiner();
+            cryptoMiner.awaitAndShutdownMainer(1000);
+            cryptoMiners.remove(cryptoMiner);
+        });
+        return amountOfMiners;
+    }
+
+    public void stopMining() {
+        cryptoMiners.forEach(CryptoMiner::turnOffMining);
+    }
+
+    public void shutdown() {
+        cryptoMiners.forEach(CryptoMiner::turnOffMiner);
+        cryptoMiners.forEach(cryptoMiners::remove);
     }
 }

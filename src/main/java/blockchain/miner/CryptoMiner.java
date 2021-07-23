@@ -33,6 +33,16 @@ public class CryptoMiner extends Thread {
         cryptoMinerTools.turnOff();
     }
 
+    public void awaitAndShutdownMainer(int awaitTime) {
+        active = false;
+        cryptoMinerTools.turnOff();
+        try {
+            join(awaitTime);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void turnOffMining() {
         cryptoMinerTools.turnOff();
     }
@@ -41,15 +51,17 @@ public class CryptoMiner extends Thread {
     public void run() {
         blockchain = Blockchain.getInstance();
         Optional<Block> lastBlock = blockchain.getLastBlock();
-        BlockBuilder nextBlockBuilder = blockBuilderFactory.getBlockBuilder(lastBlock);
+        BlockBuilder nextBlockBuilder = lastBlock.isPresent() ? blockBuilderFactory.getBlockBuilder(lastBlock.get()) :
+                blockBuilderFactory.getBlockBuilder();
         while (active) {
             cryptoMinerTools.turnOn();
-            if (lastBlock != blockchain.getLastBlock()) {
-                lastBlock = blockchain.getLastBlock();
-                nextBlockBuilder = blockBuilderFactory.getBlockBuilder(lastBlock);
-            }
             Block nextBlock = cryptoMinerTools.mineBlock(nextBlockBuilder);
             blockchain.tryAddNewBlock(nextBlock, lastBlock);
+            if (lastBlock != blockchain.getLastBlock()) {
+                lastBlock = blockchain.getLastBlock();
+                nextBlockBuilder = lastBlock.isPresent() ? blockBuilderFactory.getBlockBuilder(lastBlock.get()) :
+                        blockBuilderFactory.getBlockBuilder();
+            }
         }
     }
 

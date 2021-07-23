@@ -1,17 +1,18 @@
 package blockchain;
 
-import blockchain.mine.CryptoMine;
+import blockchain.controller.MineController;
+import blockchain.messenger.controller.MessengerController;
 
 import java.util.concurrent.TimeUnit;
 
 public class Main {
+    private static final MineController mineController = MineController.getInstance();
+    private static final MessengerController messengerController = MessengerController.getInstance();
 
     public static void main(String[] args) throws InterruptedException {
-        Blockchain blockchain = Blockchain.getInstance();
-        CryptoMine cryptoMine = CryptoMine.getInstance();
-        cryptoMine.startMining();
-        TimeUnit.SECONDS.sleep(4);
-        cryptoMine.shutdown();
-        System.out.println(blockchain);
+        mineController.addNewMainers(4);
+        TimeUnit.SECONDS.sleep(20);
+        mineController.removeAllMainers();
+        System.out.println(Blockchain.getInstance());
     }
 }

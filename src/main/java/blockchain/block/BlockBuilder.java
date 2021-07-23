@@ -72,13 +72,6 @@ public class BlockBuilder {
         return this;
     }
 
-    public void reset() {
-        index = -1;
-        timeStamp = 0;
-        hash = "";
-        previousHash = "";
-    }
-
     public Block build() {
         return new Block(index, timeStamp, hash, previousHash, magicNumber, generatingTime, authorId, amountOfZeros);
     }

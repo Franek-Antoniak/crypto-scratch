@@ -9,20 +9,13 @@ import java.util.Optional;
  */
 @Data
 public class BlockBuilderFactory {
-    public BlockBuilder getBlockBuilder(Optional<Block> previousBlock) {
-        if(previousBlock.isPresent())
-            return getBuilder(previousBlock.get());
-        return getBuilder();
-    }
-
-
     /**
      * Private method to mine new Block in BlockChain based on previous Block
      *
      * @param previousBlock Previous block in Blockchain
      * @return new Block
      */
-    private BlockBuilder getBuilder(Block previousBlock) {
+    public BlockBuilder getBlockBuilder(Block previousBlock) {
         return new BlockBuilder()
                 .setPreviousHash(previousBlock.getHash())
                 .createNewIndex(previousBlock.getIndex())
@@ -35,7 +28,7 @@ public class BlockBuilderFactory {
      *
      * @return new Block
      */
-    private BlockBuilder getBuilder() {
+    public BlockBuilder getBlockBuilder() {
         return new BlockBuilder()
                 .setPreviousHash("0")
                 .createNewIndex(0)

@@ -1,6 +1,7 @@
 package blockchain.block;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 /**
@@ -12,6 +13,7 @@ import lombok.Getter;
  *            String.valueOf(index) + String.valueOf(timeStamp) + previousHash + String.valueOf(magicNumber));
  */
 @Getter
+@EqualsAndHashCode
 @AllArgsConstructor
 public class Block {
     private final long index;

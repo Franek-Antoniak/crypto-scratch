@@ -2,14 +2,12 @@ package blockchain;
 
 import blockchain.block.Block;
 import blockchain.block.util.BlockUtil;
+import blockchain.messenger.MessageHolder;
 import blockchain.mine.CryptoMine;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Setter;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Represents a Blockchain.
@@ -33,7 +31,8 @@ public class Blockchain {
     }
 
     public synchronized void tryAddNewBlock(Block newBlock, Optional<Block> lastBlock) {
-        if (lastBlock.equals(getLastBlock()) && BlockUtil.isEnoughZeroInHash(newBlock.getHash(), newBlock.getAmountOfZeros())) {
+        if (lastBlock.equals(getLastBlock()) && BlockUtil.isEnoughZeroInHash(newBlock.getHash(),
+                newBlock.getAmountOfZeros())) {
             blockList.add(newBlock);
             cryptoMinerMine.stopMining();
         }

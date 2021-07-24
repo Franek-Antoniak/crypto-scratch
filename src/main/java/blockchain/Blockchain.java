@@ -37,18 +37,16 @@ public class Blockchain {
         return blockList.isEmpty();
     }
 
-    // TODO: 24.07.2021
     public synchronized boolean tryAddNewBlock(Block newBlock, Block lastBlock) {
-        // think about it
-        // https://stackoverflow.com/questions/3881/illegalargumentexception-or-nullpointerexception-for-a-null-parameter
-        Objects.requireNonNull(lastBlock);
-        boolean isEnoughZeros = BlockUtil.isEnoughZeroInHash(newBlock.getHash(),
-                newBlock.getAmountOfZeros());
-        // it can't be null because of requireNonNull
-        boolean isTheSameLastBlock = lastBlock.equals(getLastBlock().get());
-        if (isTheSameLastBlock && isEnoughZeros) {
-            blockList.add(newBlock);
-            return true;
+        if (lastBlock != null && !isBlockListEmpty()) {
+            boolean isEnoughZeros = BlockUtil.isEnoughZeroInHash(newBlock.getHash(),
+                    newBlock.getAmountOfZeros());
+            // it can't be null because of requireNonNull
+            boolean isTheSameLastBlock = lastBlock.equals(getLastBlock().get());
+            if (isTheSameLastBlock && isEnoughZeros) {
+                blockList.add(newBlock);
+                return true;
+            }
         }
         return false;
     }

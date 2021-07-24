@@ -31,15 +31,19 @@ public class BlockchainCustomJsonSerializer extends StdDeserializer<Blockchain> 
         Blockchain blockchain = Blockchain.getInstance();
         ObjectCodec codec = parser.getCodec();
         JsonNode node = codec.readTree(parser);
-
-        // try catch block
-        String blockListJson = node.get("blockList").toString();
+        String blockListJson = node.get("blockList")
+                .toString();
         LinkedList<BlockBuilder> dtoLinkedList = new ObjectMapper().readValue(blockListJson,
                 new TypeReference<>() {
                 });
         for (var dto : dtoLinkedList) {
             Optional<Block> lastBlock = blockchain.getLastBlock();
-            blockchain.tryAddNewBlock(dto.build(), lastBlock);
+            boolean isAdded = lastBlock.map(block -> blockchain.tryAddNewBlock(dto.build(), block))
+                    .orElseGet(() -> blockchain.tryAddNewBlock(dto.build()));
+            if (!isAdded)
+                throw new DeserializationValidationException("Block in blockchain that you provided in JSON file, is " +
+                        "not completely valid");
+
         }
         return blockchain;
     }

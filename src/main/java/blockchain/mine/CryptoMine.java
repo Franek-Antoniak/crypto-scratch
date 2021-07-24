@@ -28,7 +28,6 @@ public class CryptoMine {
         int currentAmountOfMainers = cryptoMiners.size();
         amountOfMiners = Math.min(amountOfMiners, Runtime.getRuntime()
                 .availableProcessors() - currentAmountOfMainers);
-//        System.out.println("Adding " + amountOfMiners + " crypto miners!");
         Stream.generate(CryptoMiner::new)
                 .limit(amountOfMiners)
                 .forEach(cryptoMiner -> {
@@ -39,8 +38,6 @@ public class CryptoMine {
 
     public synchronized void removeMiners(int amountOfMiners) {
         int currentAmountOfMainers = cryptoMiners.size();
-//        amountOfMiners = Math.min(amountOfMiners, currentAmountOfMainers);
-//        System.out.println("Removing " + amountOfMiners + " crypto miners.");
         cryptoMiners.forEach(cryptoMiner -> {
             cryptoMiner.turnOffMiner();
             cryptoMiner.awaitAndShutdownMainer(1000);

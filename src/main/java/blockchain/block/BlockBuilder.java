@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * Builder pattern to encapsulate creating a Block.
  */
+// TODO: 24.07.2021 I should normalize it to normal BlockBuilder
 @Data
 public class BlockBuilder {
     private long index;

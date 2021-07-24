@@ -13,7 +13,7 @@ public class BlockBuilderFactory {
      * Private method to mine new Block in BlockChain based on previous Block
      *
      * @param previousBlock Previous block in Blockchain
-     * @return new Block
+     * @return new BlockBuilder
      */
     public BlockBuilder getBlockBuilder(Block previousBlock) {
         return new BlockBuilder()
@@ -26,7 +26,7 @@ public class BlockBuilderFactory {
     /**
      * Method to mine first Block in Blockchain.
      *
-     * @return new Block
+     * @return new BlockBuilder
      */
     public BlockBuilder getBlockBuilder() {
         return new BlockBuilder()

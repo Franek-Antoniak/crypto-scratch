@@ -1,4 +1,4 @@
-package blockchain.controller;
+package blockchain.mine.controller;
 
 import blockchain.mine.facade.MineFacade;
 
@@ -19,19 +19,17 @@ public class MineController {
 
     /**
      * @param howManyToAdd - Integer that indicates the number of mainers wanted to be added by the client
-     * @return integer value that indicates how many mainers were actually added.
      */
-    public int addNewMainers(int howManyToAdd) {
-        return mainersFacade.addNewMainers(howManyToAdd);
+    public void addNewMainers(int howManyToAdd) {
+        mainersFacade.addNewMainers(howManyToAdd);
     }
 
 
     /**
      * @param howManyToRemove - Integer that indicates the number of mainers wanted to be removed by the client
-     * @return integer value that shows how many of removers where deleted
      */
-    public int removeMainers(int howManyToRemove) {
-        return mainersFacade.removeMainers(howManyToRemove);
+    public void removeMainers(int howManyToRemove) {
+        mainersFacade.removeMainers(howManyToRemove);
     }
 
     /**

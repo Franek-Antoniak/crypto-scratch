@@ -4,6 +4,8 @@ import blockchain.Blockchain;
 import blockchain.block.Block;
 import blockchain.block.BlockBuilder;
 import blockchain.block.BlockBuilderFactory;
+import blockchain.messenger.Messenger;
+import blockchain.mine.CryptoMine;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,11 +23,15 @@ public class CryptoMiner extends Thread {
     private Blockchain blockchain;
     private final CryptoMinerTools cryptoMinerTools;
     private final BlockBuilderFactory blockBuilderFactory;
+    private final CryptoMine cryptoMine;
+    private final Messenger messenger;
     private volatile boolean active = true;
 
     public CryptoMiner() {
         cryptoMinerTools = new CryptoMinerTools();
         blockBuilderFactory = new BlockBuilderFactory();
+        messenger = Messenger.getInstance();
+        cryptoMine = CryptoMine.getInstance();
     }
 
     public void turnOffMiner() {
@@ -51,16 +57,25 @@ public class CryptoMiner extends Thread {
     public void run() {
         blockchain = Blockchain.getInstance();
         Optional<Block> lastBlock = blockchain.getLastBlock();
-        BlockBuilder nextBlockBuilder = lastBlock.isPresent() ? blockBuilderFactory.getBlockBuilder(lastBlock.get()) :
-                blockBuilderFactory.getBlockBuilder();
+        BlockBuilder nextBlockBuilder = lastBlock.isPresent() ?
+                blockBuilderFactory.getBlockBuilder(lastBlock.get())
+                        .setListOfMessages(messenger.getFinalMessages()) :
+                blockBuilderFactory.getBlockBuilder()
+                        .setListOfMessages(messenger.getFinalMessages());
         while (active) {
             cryptoMinerTools.turnOn();
             Block nextBlock = cryptoMinerTools.mineBlock(nextBlockBuilder);
-            blockchain.tryAddNewBlock(nextBlock, lastBlock);
-            if (lastBlock != blockchain.getLastBlock()) {
+            boolean isAdded = blockchain.tryAddNewBlock(nextBlock, lastBlock);
+            if (isAdded) {
+                cryptoMine.stopMining();
+                messenger.safeCurrentMessages();
+            }
+            if (lastBlock != blockchain.getLastBlock() && blockchain.getLastBlock()
+                    .isPresent()) {
                 lastBlock = blockchain.getLastBlock();
-                nextBlockBuilder = lastBlock.isPresent() ? blockBuilderFactory.getBlockBuilder(lastBlock.get()) :
-                        blockBuilderFactory.getBlockBuilder();
+                nextBlockBuilder =
+                        blockBuilderFactory.getBlockBuilder(lastBlock.get())
+                                .setListOfMessages(messenger.getFinalMessages());
             }
         }
     }

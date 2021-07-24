@@ -11,11 +11,11 @@ public class RandomMessagesGenerator {
 
     private RandomMessagesGenerator() {
         this.randomMessagesList = new ArrayList<>();
-        try (FileReader fileReader = new FileReader("random/text/random_messages.txt");
+        try (FileReader fileReader = new FileReader("src/main/resources/random/text/random_messages.txt");
              BufferedReader bufferedReader = new BufferedReader(fileReader)) {
-            randomMessagesList.add(bufferedReader.readLine());
-        }
-        catch(Exception e) {
+            while (bufferedReader.ready())
+                randomMessagesList.add(bufferedReader.readLine());
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -29,8 +29,8 @@ public class RandomMessagesGenerator {
     }
 
     public String getRandomMessage() {
-        int randomInt = ThreadLocalRandom.current()
-                .nextInt(randomMessagesList.size());
+        int randomInt = Math.abs(ThreadLocalRandom.current()
+                .nextInt(randomMessagesList.size()));
         return randomMessagesList.get(randomInt);
     }
 

@@ -11,8 +11,6 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 
-sourceSets.main.resources.srcDirs = ["src/main/resources"]
-
 dependencies {
     // LOMBOK - ANNOTATIONS
     testCompileOnly 'org.projectlombok:lombok:1.18.20'

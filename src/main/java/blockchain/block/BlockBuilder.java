@@ -1,17 +1,16 @@
 package blockchain.block;
 
 import blockchain.messenger.MessageHolder;
-import blockchain.util.StringUtil;
-import lombok.Data;
+import lombok.Getter;
 
-import java.util.Date;
 import java.util.List;
 
 /**
  * Builder pattern to encapsulate creating a Block.
  */
 // TODO: 24.07.2021 I should normalize it to normal BlockBuilder
-@Data
+
+@Getter
 public class BlockBuilder {
     private long index;
     private long timeStamp;
@@ -23,15 +22,10 @@ public class BlockBuilder {
     private long generatingTime;
     private long authorId;
     private long amountOfZeros;
-    private List<MessageHolder> finalMessages;
+    private List<MessageHolder> messages;
 
-    /**
-     * Generate new Index by adding one to the previousIndex
-     *
-     * @param previousIndex Index of the preceding block in the blockchain
-     */
-    public BlockBuilder createNewIndex(long previousIndex) {
-        this.index = ++previousIndex;
+    public BlockBuilder setIndex(long index) {
+        this.index = index;
         return this;
     }
 
@@ -40,15 +34,13 @@ public class BlockBuilder {
         return this;
     }
 
-    public BlockBuilder generateTimeStamp() {
-        this.timeStamp = new Date().getTime();
+    public BlockBuilder setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
         return this;
     }
 
-    public BlockBuilder generateHash() {
-        hash =
-                StringUtil.applySha256(
-                        String.valueOf(index) + String.valueOf(timeStamp) + previousHash + String.valueOf(magicNumber));
+    public BlockBuilder setHash(String hash) {
+        this.hash = hash;
         return this;
     }
 
@@ -67,22 +59,18 @@ public class BlockBuilder {
         return this;
     }
 
-    public BlockBuilder changeAmountOfZeros(long amountOfZerosOfPrevious, long generatingTimeOfPrevious) {
-        this.amountOfZeros = amountOfZerosOfPrevious;
-        if (generatingTimeOfPrevious > 60)
-            this.amountOfZeros--;
-        if (generatingTimeOfPrevious < 5)
-            this.amountOfZeros++;
+    public BlockBuilder setAmountOfZeros(long amountOfZeros) {
+        this.amountOfZeros = amountOfZeros;
         return this;
     }
 
-    public BlockBuilder setListOfMessages(List<MessageHolder> finalMessages) {
-        this.finalMessages = finalMessages;
+    public BlockBuilder setMessages(List<MessageHolder> finalMessages) {
+        this.messages = finalMessages;
         return this;
     }
 
     public Block build() {
         return new Block(index, timeStamp, hash, previousHash, magicNumber, generatingTime, authorId, amountOfZeros,
-                finalMessages);
+                messages);
     }
 }

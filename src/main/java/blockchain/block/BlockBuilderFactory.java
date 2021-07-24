@@ -2,7 +2,7 @@ package blockchain.block;
 
 import lombok.Data;
 
-import java.util.Optional;
+import java.util.Date;
 
 /**
  * Factory method pattern with overloading methods to encapsulate creating a Block.
@@ -16,11 +16,17 @@ public class BlockBuilderFactory {
      * @return new BlockBuilder
      */
     public BlockBuilder getBlockBuilder(Block previousBlock) {
+        long amountOfZeros = previousBlock.getAmountOfZeros();
+        long generatingTime = previousBlock.getGeneratingTime();
+        if (generatingTime > 60)
+            amountOfZeros--;
+        else if (generatingTime < 5)
+            amountOfZeros++;
         return new BlockBuilder()
                 .setPreviousHash(previousBlock.getHash())
-                .createNewIndex(previousBlock.getIndex())
-                .changeAmountOfZeros(previousBlock.getAmountOfZeros(), previousBlock.getGeneratingTime())
-                .generateTimeStamp();
+                .setIndex(previousBlock.getIndex() + 1)
+                .setAmountOfZeros(amountOfZeros)
+                .setTimeStamp(new Date().getTime());
     }
 
     /**
@@ -31,8 +37,8 @@ public class BlockBuilderFactory {
     public BlockBuilder getBlockBuilder() {
         return new BlockBuilder()
                 .setPreviousHash("0")
-                .createNewIndex(0)
-                .changeAmountOfZeros(0, 0)
-                .generateTimeStamp();
+                .setIndex(1)
+                .setAmountOfZeros(0)
+                .setTimeStamp(new Date().getTime());
     }
 }

@@ -1,9 +1,11 @@
 package blockchain.block;
 
+import blockchain.messenger.MessageHolder;
 import blockchain.util.StringUtil;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Builder pattern to encapsulate creating a Block.
@@ -20,6 +22,7 @@ public class BlockBuilder {
     private long generatingTime;
     private long authorId;
     private long amountOfZeros;
+    private List<MessageHolder> finalMessages;
 
     /**
      * Generate new Index by adding one to the previousIndex
@@ -65,14 +68,20 @@ public class BlockBuilder {
 
     public BlockBuilder changeAmountOfZeros(long amountOfZerosOfPrevious, long generatingTimeOfPrevious) {
         this.amountOfZeros = amountOfZerosOfPrevious;
-        if(generatingTimeOfPrevious > 60)
+        if (generatingTimeOfPrevious > 60)
             this.amountOfZeros--;
-        if(generatingTimeOfPrevious < 5)
+        if (generatingTimeOfPrevious < 5)
             this.amountOfZeros++;
         return this;
     }
 
+    public BlockBuilder setListOfMessages(List<MessageHolder> finalMessages) {
+        this.finalMessages = finalMessages;
+        return this;
+    }
+
     public Block build() {
-        return new Block(index, timeStamp, hash, previousHash, magicNumber, generatingTime, authorId, amountOfZeros);
+        return new Block(index, timeStamp, hash, previousHash, magicNumber, generatingTime, authorId, amountOfZeros,
+                finalMessages);
     }
 }

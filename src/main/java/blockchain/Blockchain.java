@@ -2,12 +2,14 @@ package blockchain;
 
 import blockchain.block.Block;
 import blockchain.block.util.BlockUtil;
-import blockchain.messenger.MessageHolder;
 import blockchain.mine.CryptoMine;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Setter;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  * Represents a Blockchain.
@@ -30,12 +32,16 @@ public class Blockchain {
         return BlockChainSingleton.instance;
     }
 
-    public synchronized void tryAddNewBlock(Block newBlock, Optional<Block> lastBlock) {
-        if (lastBlock.equals(getLastBlock()) && BlockUtil.isEnoughZeroInHash(newBlock.getHash(),
-                newBlock.getAmountOfZeros())) {
+    // TODO: 24.07.2021
+    public synchronized boolean tryAddNewBlock(Block newBlock, Optional<Block> lastBlock) {
+        boolean isEnoughZeros = BlockUtil.isEnoughZeroInHash(newBlock.getHash(),
+                newBlock.getAmountOfZeros());
+        boolean isTheSameLastBlock = lastBlock.equals(getLastBlock());
+        if (isTheSameLastBlock && isEnoughZeros) {
             blockList.add(newBlock);
-            cryptoMinerMine.stopMining();
+            return true;
         }
+        return false;
     }
 
     @JsonIgnore

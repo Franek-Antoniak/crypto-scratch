@@ -17,12 +17,12 @@ public class MineFacade {
         return MineFacadeSingleton.instance;
     }
 
-    public int removeMainers(int howManyToRemove) {
-        return cryptoMine.removeMiners(howManyToRemove);
+    public void removeMainers(int howManyToRemove) {
+        cryptoMine.removeMiners(howManyToRemove);
     }
 
-    public int addNewMainers(int howManyToAdd) {
-        return cryptoMine.addMiners(howManyToAdd);
+    public void addNewMainers(int howManyToAdd) {
+        cryptoMine.addMiners(howManyToAdd);
     }
 
     public void removeAllMainers() {

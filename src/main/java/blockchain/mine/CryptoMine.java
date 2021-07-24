@@ -3,7 +3,8 @@ package blockchain.mine;
 import blockchain.miner.CryptoMiner;
 import lombok.Data;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.stream.Stream;
 
@@ -23,30 +24,28 @@ public class CryptoMine {
         return CryptoMinerMineSingleton.instance;
     }
 
-    public int addMiners(int amountOfMiners) {
+    public void addMiners(int amountOfMiners) {
         int currentAmountOfMainers = cryptoMiners.size();
         amountOfMiners = Math.min(amountOfMiners, Runtime.getRuntime()
                 .availableProcessors() - currentAmountOfMainers);
-        System.out.println("Adding " + amountOfMiners + " crypto miners!");
+//        System.out.println("Adding " + amountOfMiners + " crypto miners!");
         Stream.generate(CryptoMiner::new)
                 .limit(amountOfMiners)
                 .forEach(cryptoMiner -> {
                     cryptoMiners.add(cryptoMiner);
                     cryptoMiner.start();
                 });
-        return amountOfMiners;
     }
 
-    public synchronized int removeMiners(int amountOfMiners) {
+    public synchronized void removeMiners(int amountOfMiners) {
         int currentAmountOfMainers = cryptoMiners.size();
-        amountOfMiners = Math.min(amountOfMiners, currentAmountOfMainers);
-        System.out.println("Removing " + amountOfMiners + " crypto miners.");
+//        amountOfMiners = Math.min(amountOfMiners, currentAmountOfMainers);
+//        System.out.println("Removing " + amountOfMiners + " crypto miners.");
         cryptoMiners.forEach(cryptoMiner -> {
             cryptoMiner.turnOffMiner();
             cryptoMiner.awaitAndShutdownMainer(1000);
             cryptoMiners.remove(cryptoMiner);
         });
-        return amountOfMiners;
     }
 
     public void stopMining() {

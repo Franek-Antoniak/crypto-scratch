@@ -7,6 +7,7 @@ import blockchain.block.BlockBuilderFactory;
 import blockchain.block.util.BlockUtil;
 import blockchain.messenger.Messenger;
 import blockchain.mine.CryptoMine;
+import blockchain.util.StringUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -51,21 +52,36 @@ public class CryptoMiner extends Thread {
         }
     }
 
-
     public Block mineBlock(BlockBuilder blockBuilder) {
         long startTime = new Date().getTime();
         long randomNumber;
+        boolean isNotEnoughZeros;
         do {
             randomNumber = ThreadLocalRandom.current()
                     .nextLong(Long.MAX_VALUE);
             blockBuilder.setMagicNumber(randomNumber)
-                    .generateHash();
-        } while (!BlockUtil.isEnoughZeroInHash(blockBuilder.getHash(), blockBuilder.getAmountOfZeros()) && isMining);
+                    .setHash(getShaValue(blockBuilder));
+            isNotEnoughZeros = !BlockUtil.isEnoughZeroInHash(blockBuilder.getHash(),
+                    blockBuilder.getAmountOfZeros());
+        } while (isMining && isNotEnoughZeros);
         long secondsOfGenerating = (new Date().getTime() - startTime) / 1000;
-        blockBuilder.setGeneratingTime(secondsOfGenerating)
-                .setAuthor(Thread.currentThread()
-                        .getId());
-        return blockBuilder.build();
+        return blockBuilder.setGeneratingTime(secondsOfGenerating)
+                .setAuthor(Thread.currentThread().getId())
+                .build();
+    }
+
+    public String getShaValue(BlockBuilder blockBuilder) {
+        StringBuilder inputBuilder = new StringBuilder();
+        return StringUtil.applySha256(inputBuilder
+                .append(blockBuilder.getIndex())
+                .append(blockBuilder.getTimeStamp())
+                .append(blockBuilder.getPreviousHash())
+                .append(blockBuilder.getMagicNumber())
+                .append(blockBuilder.getGeneratingTime())
+                .append(blockBuilder.getAuthorId())
+                .append(blockBuilder.getAmountOfZeros())
+                .append(blockBuilder.getMessages())
+                .toString());
     }
 
 
@@ -80,9 +96,9 @@ public class CryptoMiner extends Thread {
         Optional<Block> lastBlock = blockchain.getLastBlock();
         BlockBuilder nextBlockBuilder = lastBlock.isPresent() ?
                 blockBuilderFactory.getBlockBuilder(lastBlock.get())
-                        .setListOfMessages(messenger.getFinalMessages()) :
+                        .setMessages(messenger.getFinalMessages()) :
                 blockBuilderFactory.getBlockBuilder()
-                        .setListOfMessages(messenger.getFinalMessages());
+                        .setMessages(messenger.getFinalMessages());
         while (isWorking) {
             isMining = true;
             Block nextBlock = mineBlock(nextBlockBuilder);
@@ -97,7 +113,7 @@ public class CryptoMiner extends Thread {
                 lastBlock = blockchain.getLastBlock();
                 nextBlockBuilder =
                         blockBuilderFactory.getBlockBuilder(lastBlock.get())
-                                .setListOfMessages(messenger.getFinalMessages());
+                                .setMessages(messenger.getFinalMessages());
             }
         }
     }

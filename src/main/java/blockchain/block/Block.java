@@ -2,6 +2,7 @@ package blockchain.block;
 
 import blockchain.messenger.MessageHolder;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -9,9 +10,10 @@ import java.util.List;
 
 /**
  * Represents a Block of a BlockChain.
+ * Formula for Sha-256 hash:
  *
  * @author https://github.com/Franek-Antoniak
- * <p> Formula of hash in the block: </p> {@link BlockBuilder#generateHash()}
+ * <p> Formula of hash in the block: </p> {@link BlockBuilder#()}
  */
 @Getter
 @EqualsAndHashCode
@@ -62,6 +64,7 @@ public class Block {
                 .append(dataBlockInfo)
                 .append(generatingTimeInfo)
                 .append(zerosChangesInfo)
+                .append('\n')
                 .toString();
     }
 }

@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 public class Person extends Thread {
     private final MessengerController messengerController = MessengerController.getInstance();
     private final RandomMessagesGenerator messagesGenerator = RandomMessagesGenerator.getInstance();
-    private final static List<String> listOfNames = List.of("Seward", "Rosie", "Benson", "Westley", "Harve", "Vince",
+    private final static List<String> listOfNames = List.of("Seward", "Rosie", "Benson", "Westley", "Harvey", "Vince",
             "Felicity", "Eleanore", "Jameson", "Lorinda", "Kristy", "Doreen", "Lorene", "Bernadette", "Roly");
 
     public Person(String name) {
@@ -23,8 +23,8 @@ public class Person extends Thread {
                     String randomMessage = messagesGenerator.getRandomMessage();
                     messengerController.sendNewMessage(randomMessage);
                     try {
-                        sleep(ThreadLocalRandom.current()
-                                .nextInt(1000));
+                        sleep(Math.abs(ThreadLocalRandom.current()
+                                .nextInt(1000)));
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -32,8 +32,8 @@ public class Person extends Thread {
     }
 
     public static String generateName() {
-        int randomInt = ThreadLocalRandom.current()
-                .nextInt(listOfNames.size());
+        int randomInt = Math.abs(ThreadLocalRandom.current()
+                .nextInt(listOfNames.size()));
         return listOfNames.get(randomInt);
     }
 }

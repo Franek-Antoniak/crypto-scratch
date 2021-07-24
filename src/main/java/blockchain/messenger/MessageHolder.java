@@ -1,15 +1,13 @@
 package blockchain.messenger;
 
-import lombok.Setter;
-
 public class MessageHolder {
-    private String author;
-    @Setter
-    private String message;
+    private final String author;
+    private final String message;
 
     public MessageHolder(String message) {
         this.message = message;
-        this.author = Thread.currentThread().getName();
+        this.author = Thread.currentThread()
+                .getName();
     }
 
     @Override

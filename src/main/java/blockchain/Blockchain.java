@@ -8,7 +8,7 @@ import lombok.Setter;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -32,11 +32,20 @@ public class Blockchain {
         return BlockChainSingleton.instance;
     }
 
+    // Ask someone if it should be synchronized
+    public synchronized boolean isBlockListEmpty() {
+        return blockList.isEmpty();
+    }
+
     // TODO: 24.07.2021
-    public synchronized boolean tryAddNewBlock(Block newBlock, Optional<Block> lastBlock) {
+    public synchronized boolean tryAddNewBlock(Block newBlock, Block lastBlock) {
+        // think about it
+        // https://stackoverflow.com/questions/3881/illegalargumentexception-or-nullpointerexception-for-a-null-parameter
+        Objects.requireNonNull(lastBlock);
         boolean isEnoughZeros = BlockUtil.isEnoughZeroInHash(newBlock.getHash(),
                 newBlock.getAmountOfZeros());
-        boolean isTheSameLastBlock = lastBlock.equals(getLastBlock());
+        // it can't be null because of requireNonNull
+        boolean isTheSameLastBlock = lastBlock.equals(getLastBlock().get());
         if (isTheSameLastBlock && isEnoughZeros) {
             blockList.add(newBlock);
             return true;
@@ -44,17 +53,24 @@ public class Blockchain {
         return false;
     }
 
-    @JsonIgnore
-    public Optional<Block> getLastBlock() {
-        try {
-            return Optional.of(blockList.getLast());
-        } catch (NoSuchElementException e) {
-            return Optional.empty();
+    public synchronized boolean tryAddNewBlock(Block newBlock) {
+        if (isBlockListEmpty()) {
+            boolean isEnoughZeros = BlockUtil.isEnoughZeroInHash(newBlock.getHash(),
+                    newBlock.getAmountOfZeros());
+            if (isEnoughZeros) {
+                blockList.add(newBlock);
+                return true;
+            }
         }
+        return false;
     }
 
-    public int sizeOfBlockchain() {
-        return blockList.size();
+    // Ask someone if it should be synchronized
+    @JsonIgnore
+    public synchronized Optional<Block> getLastBlock() {
+        if (isBlockListEmpty())
+            return Optional.empty();
+        return Optional.of(blockList.getLast());
     }
 
     /**

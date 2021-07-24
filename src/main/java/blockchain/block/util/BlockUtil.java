@@ -1,6 +1,6 @@
 package blockchain.block.util;
 
-public class BlockUtil {
+final public class BlockUtil {
 
     private BlockUtil() {
     }

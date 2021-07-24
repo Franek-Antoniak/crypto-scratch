@@ -6,15 +6,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Represents a Block of a BlockChain.
  *
  * @author https://github.com/Franek-Antoniak
- * Formula of hash in the block:
- * StringUtil.applySha256(
- * String.valueOf(index) + String.valueOf(timeStamp) + previousHash + String.valueOf(magicNumber));
+ * <p> Formula of hash in the block: </p> {@link BlockBuilder#generateHash()}
  */
 @Getter
 @EqualsAndHashCode
@@ -39,40 +36,32 @@ public class Block {
         String dataBlock = "Block data:" + (messages.isEmpty() ? " no messages" : "");
         StringBuilder messagesBuilder = new StringBuilder();
         messages.forEach(messagesBuilder::append);
-        stringBuilder.append("Block: \n" + "Created by miner # ")
-                .append(authorId)
-                .append('\n')
-                .append("Id: ")
-                .append(index)
-                .append('\n')
-                .append("Timestamp: ")
-                .append(timeStamp)
-                .append('\n')
-                .append("Magic number: ")
-                .append(magicNumber)
-                .append('\n')
-                .append("Hash of the previous block:\n")
-                .append(previousHash)
-                .append('\n')
-                .append("Hash of the block:\n")
-                .append(hash)
-                .append('\n')
-                .append(dataBlock)
-                .append('\n')
-                .append(messagesBuilder)
-                .append("Block was generating for: ")
-                .append(generatingTime)
-                .append(" seconds")
-                .append('\n');
+        String authorInfo = "Block: \n" + "Created by miner # " + authorId + '\n';
+        String idInfo = "Id: " + index + '\n';
+        String timestampInfo = "Timestamp: " + timeStamp + '\n';
+        String magicNumberInfo = "Magic number: " + magicNumber + '\n';
+        String previousHashInfo = "Hash of the previous block:\n" + previousHash + '\n';
+        String hashOfTheBlockInfo = "Hash of the block:\n" + hash + '\n';
+        String dataBlockInfo = dataBlock + '\n' + messagesBuilder;
+        String generatingTimeInfo = "Block was generating for: " + generatingTime + " seconds" + '\n';
+        String zerosChangesInfo;
         if (generatingTime < 5)
-            stringBuilder.append("N was increased to ")
-                    .append(amountOfZeros + 1);
+            zerosChangesInfo = "N was increased to " + (amountOfZeros + 1);
+        // You can create some math function
         else if (generatingTime > 60)
-            stringBuilder.append("N was decreased by ")
-                    .append(1);
+            zerosChangesInfo = "N was decreased by 1";
         else
-            stringBuilder.append("N stays the same");
-        return stringBuilder.append('\n')
+            zerosChangesInfo = "N stays the same";
+        return stringBuilder
+                .append(authorInfo)
+                .append(idInfo)
+                .append(timestampInfo)
+                .append(magicNumberInfo)
+                .append(previousHashInfo)
+                .append(hashOfTheBlockInfo)
+                .append(dataBlockInfo)
+                .append(generatingTimeInfo)
+                .append(zerosChangesInfo)
                 .toString();
     }
 }

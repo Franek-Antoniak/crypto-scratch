@@ -14,12 +14,12 @@ public class MessengerController {
         return MessengerControllerSingleton.instance;
     }
 
+    private static class MessengerControllerSingleton {
+        private static final MessengerController instance = new MessengerController();
+    }
+
     public void sendNewMessage(String message) {
         MessageHolder messageHolder = new MessageHolder(message);
         messenger.addMessage(messageHolder);
-    }
-
-    private static class MessengerControllerSingleton {
-        private static final MessengerController instance = new MessengerController();
     }
 }

@@ -39,7 +39,7 @@ public class CryptoMiner extends Thread {
         isMining = false;
     }
 
-    public void awaitAndShutdownMainer(int awaitTime) {
+    public void awaitAndTurnDownMainer(int awaitTime) {
         isWorking = false;
         isMining = false;
         try {

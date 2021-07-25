@@ -1,7 +1,7 @@
 package blockchain;
 
-import blockchain.mine.controller.MineController;
 import blockchain.messenger.Messenger;
+import blockchain.mine.controller.MineController;
 
 import java.util.concurrent.TimeUnit;
 

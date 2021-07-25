@@ -9,10 +9,6 @@ public class MineFacade {
 
     }
 
-    private static class MineFacadeSingleton {
-        private static final MineFacade instance = new MineFacade();
-    }
-
     public static MineFacade getInstance() {
         return MineFacadeSingleton.instance;
     }
@@ -27,5 +23,9 @@ public class MineFacade {
 
     public void removeAllMainers() {
         cryptoMine.shutdown();
+    }
+
+    private static class MineFacadeSingleton {
+        private static final MineFacade instance = new MineFacade();
     }
 }

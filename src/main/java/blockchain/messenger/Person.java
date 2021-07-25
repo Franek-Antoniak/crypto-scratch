@@ -7,13 +7,19 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
 public class Person extends Thread {
-    private final MessengerController messengerController = MessengerController.getInstance();
-    private final RandomMessagesGenerator messagesGenerator = RandomMessagesGenerator.getInstance();
     private final static List<String> listOfNames = List.of("Seward", "Rosie", "Benson", "Westley", "Harvey", "Vince",
             "Felicity", "Eleanore", "Jameson", "Lorinda", "Kristy", "Doreen", "Lorene", "Bernadette", "Roly");
+    private final MessengerController messengerController = MessengerController.getInstance();
+    private final RandomMessagesGenerator messagesGenerator = RandomMessagesGenerator.getInstance();
 
     public Person(String name) {
         super(name);
+    }
+
+    public static String generateName() {
+        int randomInt = Math.abs(ThreadLocalRandom.current()
+                .nextInt(listOfNames.size()));
+        return listOfNames.get(randomInt);
     }
 
     @Override
@@ -29,11 +35,5 @@ public class Person extends Thread {
                         e.printStackTrace();
                     }
                 });
-    }
-
-    public static String generateName() {
-        int randomInt = Math.abs(ThreadLocalRandom.current()
-                .nextInt(listOfNames.size()));
-        return listOfNames.get(randomInt);
     }
 }

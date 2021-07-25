@@ -20,10 +20,6 @@ public class RandomMessagesGenerator {
         }
     }
 
-    private static class RandomMessagesGeneratorSingleton {
-        private static final RandomMessagesGenerator instance = new RandomMessagesGenerator();
-    }
-
     public static RandomMessagesGenerator getInstance() {
         return RandomMessagesGeneratorSingleton.instance;
     }
@@ -32,6 +28,10 @@ public class RandomMessagesGenerator {
         int randomInt = Math.abs(ThreadLocalRandom.current()
                 .nextInt(randomMessagesList.size()));
         return randomMessagesList.get(randomInt);
+    }
+
+    private static class RandomMessagesGeneratorSingleton {
+        private static final RandomMessagesGenerator instance = new RandomMessagesGenerator();
     }
 
 }

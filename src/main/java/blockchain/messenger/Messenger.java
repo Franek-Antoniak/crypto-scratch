@@ -2,11 +2,13 @@ package blockchain.messenger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Messenger {
     private final List<MessageHolder> newMessagesHolderList = new ArrayList<>();
     private List<MessageHolder> finalList = new ArrayList<>();
+    private List<Person> listOfUsers;
 
     private Messenger() {
 
@@ -16,10 +18,11 @@ public class Messenger {
         return MessengerSingleton.messenger;
     }
 
-    public synchronized void addPeople(int howManyPeople) {
-        Stream.generate(() -> new Person(Person.generateName()))
+    public void addPeople(int howManyPeople) {
+        listOfUsers = Stream.generate(() -> new Person(Person.generateName()))
                 .limit(howManyPeople)
-                .forEach(Thread::start);
+                .peek(Thread::start)
+                .collect(Collectors.toList());
     }
 
     public synchronized void addMessage(MessageHolder message) {
@@ -33,6 +36,16 @@ public class Messenger {
 
     public List<MessageHolder> getFinalMessages() {
         return finalList;
+    }
+
+    public void joinUsers() {
+        listOfUsers.forEach(thread -> {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private final static class MessengerSingleton {

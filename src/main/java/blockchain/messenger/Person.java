@@ -29,8 +29,7 @@ public class Person extends Thread {
                     String randomMessage = messagesGenerator.getRandomMessage();
                     messengerController.sendNewMessage(randomMessage);
                     try {
-                        sleep(Math.abs(ThreadLocalRandom.current()
-                                .nextInt(1000)));
+                        sleep(Math.abs(ThreadLocalRandom.current().nextInt(1000)));
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

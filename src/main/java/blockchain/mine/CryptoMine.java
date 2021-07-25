@@ -33,10 +33,9 @@ public class CryptoMine {
     }
 
     public synchronized void removeMiners(int amountOfMiners) {
-        int currentAmountOfMainers = cryptoMiners.size();
-        cryptoMiners.forEach(cryptoMiner -> {
+        amountOfMiners = Math.min(amountOfMiners, cryptoMiners.size());
+        cryptoMiners.stream().limit(amountOfMiners).forEach(cryptoMiner -> {
             cryptoMiner.turnOffMiner();
-            cryptoMiner.awaitAndShutdownMainer(1000);
             cryptoMiners.remove(cryptoMiner);
         });
     }

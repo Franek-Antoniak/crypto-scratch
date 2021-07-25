@@ -10,10 +10,11 @@ public class Main {
     private static final Messenger messenger = Messenger.getInstance();
 
     public static void main(String[] args) throws InterruptedException {
-        mineController.addNewMainers(4);
-        messenger.addPeople(3);
-        TimeUnit.SECONDS.sleep(60);
+        mineController.addNewMainers(1);
+        messenger.addPeople(1);
+        TimeUnit.SECONDS.sleep(2);
         mineController.removeAllMainers();
+        messenger.joinUsers();
         System.out.println(Blockchain.getInstance());
     }
 }

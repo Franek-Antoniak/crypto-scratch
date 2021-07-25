@@ -40,9 +40,10 @@ public class BlockchainCustomJsonSerializer extends StdDeserializer<Blockchain> 
             Optional<Block> lastBlock = blockchain.getLastBlock();
             boolean isAdded = lastBlock.map(block -> blockchain.tryAddNewBlock(dto.build(), block))
                     .orElseGet(() -> blockchain.tryAddNewBlock(dto.build()));
+            // TODO: 25.07.2021 Make normalized validation
             if (!isAdded)
                 throw new DeserializationValidationException("Block in blockchain that you provided in JSON file, is " +
-                        "not completely valid");
+                        "not completely valid. Block that is not valid - " + dto.build());
 
         }
         return blockchain;

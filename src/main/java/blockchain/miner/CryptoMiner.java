@@ -24,17 +24,14 @@ import java.util.concurrent.ThreadLocalRandom;
 @Getter
 @Setter
 public class CryptoMiner extends Thread {
+    private final BlockBuilderFactory blockBuilderFactory = new BlockBuilderFactory();
+    private final CryptoMine cryptoMine = CryptoMine.getInstance();
+    private final Messenger messenger = Messenger.getInstance();
     private Blockchain blockchain;
-    private final BlockBuilderFactory blockBuilderFactory;
-    private final CryptoMine cryptoMine;
-    private final Messenger messenger;
     private volatile boolean isWorking = false;
     private volatile boolean isMining = false;
 
     public CryptoMiner() {
-        blockBuilderFactory = new BlockBuilderFactory();
-        messenger = Messenger.getInstance();
-        cryptoMine = CryptoMine.getInstance();
     }
 
     public void turnOffMiner() {
@@ -61,12 +58,12 @@ public class CryptoMiner extends Thread {
                     .nextLong(Long.MAX_VALUE);
             blockBuilder.setMagicNumber(randomNumber)
                     .setHash(getShaValue(blockBuilder));
-            isNotEnoughZeros = !BlockUtil.isEnoughZeroInHash(blockBuilder.getHash(),
-                    blockBuilder.getAmountOfZeros());
+            isNotEnoughZeros = !BlockUtil.isEnoughZeroInHash(blockBuilder.getHash(), blockBuilder.getAmountOfZeros());
         } while (isMining && isNotEnoughZeros);
         long secondsOfGenerating = (new Date().getTime() - startTime) / 1000;
         return blockBuilder.setGeneratingTime(secondsOfGenerating)
-                .setAuthor(Thread.currentThread().getId())
+                .setAuthor(Thread.currentThread()
+                        .getId())
                 .build();
     }
 

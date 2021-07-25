@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -38,11 +37,11 @@ public class Blockchain {
     }
 
     public synchronized boolean tryAddNewBlock(Block newBlock, Block lastBlock) {
-        if (lastBlock != null && !isBlockListEmpty()) {
-            boolean isEnoughZeros = BlockUtil.isEnoughZeroInHash(newBlock.getHash(),
-                    newBlock.getAmountOfZeros());
-            // it can't be null because of requireNonNull
-            boolean isTheSameLastBlock = lastBlock.equals(getLastBlock().get());
+        Optional<Block> blockchainLastBlock = getLastBlock();
+        if (blockchainLastBlock.isPresent() && !isBlockListEmpty()) {
+            long amountOfZeros = BlockUtil.howManyZerosInNext(lastBlock);
+            boolean isEnoughZeros = BlockUtil.isEnoughZeroInHash(newBlock.getHash(), amountOfZeros);
+            boolean isTheSameLastBlock = lastBlock.equals(blockchainLastBlock.get());
             if (isTheSameLastBlock && isEnoughZeros) {
                 blockList.add(newBlock);
                 return true;
@@ -53,8 +52,7 @@ public class Blockchain {
 
     public synchronized boolean tryAddNewBlock(Block newBlock) {
         if (isBlockListEmpty()) {
-            boolean isEnoughZeros = BlockUtil.isEnoughZeroInHash(newBlock.getHash(),
-                    newBlock.getAmountOfZeros());
+            boolean isEnoughZeros = BlockUtil.isEnoughZeroInHash(newBlock.getHash(), 0);
             if (isEnoughZeros) {
                 blockList.add(newBlock);
                 return true;

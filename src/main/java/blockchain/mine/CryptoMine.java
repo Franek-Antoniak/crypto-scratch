@@ -16,10 +16,6 @@ public class CryptoMine {
         cryptoMiners = new ConcurrentSkipListSet<>(Comparator.comparing(CryptoMiner::getId));
     }
 
-    private static class CryptoMinerMineSingleton {
-        private static final CryptoMine instance = new CryptoMine();
-    }
-
     public static CryptoMine getInstance() {
         return CryptoMinerMineSingleton.instance;
     }
@@ -52,5 +48,9 @@ public class CryptoMine {
     public void shutdown() {
         cryptoMiners.forEach(CryptoMiner::turnOffMiner);
         cryptoMiners.forEach(cryptoMiners::remove);
+    }
+
+    private static class CryptoMinerMineSingleton {
+        private static final CryptoMine instance = new CryptoMine();
     }
 }

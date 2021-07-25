@@ -1,8 +1,8 @@
 package blockchain.block;
 
+import blockchain.block.util.BlockUtil;
 import blockchain.messenger.MessageHolder;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -47,13 +47,18 @@ public class Block {
         String dataBlockInfo = dataBlock + '\n' + messagesBuilder;
         String generatingTimeInfo = "Block was generating for: " + generatingTime + " seconds" + '\n';
         String zerosChangesInfo;
-        if (generatingTime < 5)
-            zerosChangesInfo = "N was increased to " + (amountOfZeros + 1);
-        // You can create some math function
-        else if (generatingTime > 60)
-            zerosChangesInfo = "N was decreased by 1";
-        else
-            zerosChangesInfo = "N stays the same";
+        TimeState timeState = BlockUtil.howLongGenerated(generatingTime);
+        switch (timeState) {
+            case SHORT:
+                zerosChangesInfo = "N was increased to " + (amountOfZeros + 1);
+                break;
+            case LONG:
+                zerosChangesInfo = "N was decreased by 1";
+                break;
+            default:
+                zerosChangesInfo = "N stays the same";
+                break;
+        }
         return stringBuilder
                 .append(authorInfo)
                 .append(idInfo)

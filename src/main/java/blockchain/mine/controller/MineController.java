@@ -9,10 +9,6 @@ public class MineController {
 
     }
 
-    private static class MineControllerSingleton {
-        private static final MineController instance = new MineController();
-    }
-
     public static MineController getInstance() {
         return MineControllerSingleton.instance;
     }
@@ -23,7 +19,6 @@ public class MineController {
     public void addNewMainers(int howManyToAdd) {
         mainersFacade.addNewMainers(howManyToAdd);
     }
-
 
     /**
      * @param howManyToRemove - Integer that indicates the number of mainers wanted to be removed by the client
@@ -37,5 +32,9 @@ public class MineController {
      */
     public void removeAllMainers() {
         mainersFacade.removeAllMainers();
+    }
+
+    private static class MineControllerSingleton {
+        private static final MineController instance = new MineController();
     }
 }

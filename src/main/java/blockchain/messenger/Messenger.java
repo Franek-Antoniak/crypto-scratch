@@ -12,10 +12,6 @@ public class Messenger {
 
     }
 
-    private final static class MessengerSingleton {
-        private static final Messenger messenger = new Messenger();
-    }
-
     public static Messenger getInstance() {
         return MessengerSingleton.messenger;
     }
@@ -37,6 +33,10 @@ public class Messenger {
 
     public List<MessageHolder> getFinalMessages() {
         return finalList;
+    }
+
+    private final static class MessengerSingleton {
+        private static final Messenger messenger = new Messenger();
     }
 
 }

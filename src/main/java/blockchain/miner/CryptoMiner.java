@@ -14,6 +14,7 @@ import lombok.Setter;
 import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Represents a CryptoMiner.
@@ -88,6 +89,7 @@ public class CryptoMiner extends Thread {
 
     @Override
     public void run() {
+
         blockchain = Blockchain.getInstance();
         isWorking = true;
         Optional<Block> lastBlock = blockchain.getLastBlock();

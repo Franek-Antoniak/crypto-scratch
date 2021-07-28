@@ -1,9 +1,7 @@
 package blockchain.messenger;
 
+import blockchain.util.StringUtil;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
@@ -11,14 +9,13 @@ public class MessageHolder {
     private final String author;
     private final String messageData;
     private final String sign;
-    private final long id;
 
-    public MessageHolder(List<byte[]> encryptedData, long id) {
+
+    public MessageHolder(List<byte[]> encryptedData) {
         this.messageData = new String(encryptedData.get(0));
-        this.sign = new String(encryptedData.get(1));
+        this.sign = StringUtil.bytesToHex(encryptedData.get(1));
         this.author = Thread.currentThread()
                 .getName();
-        this.id = id;
     }
 
     @Override

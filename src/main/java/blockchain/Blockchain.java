@@ -17,8 +17,6 @@ import java.util.Optional;
 public class Blockchain {
     /* List that contains Block with info */
     private final LinkedList<Block> blockList = new LinkedList<>();
-    @JsonIgnore
-    private final CryptoMine cryptoMinerMine = CryptoMine.getInstance();
 
     private Blockchain() {
     }
@@ -31,7 +29,6 @@ public class Blockchain {
         return BlockChainSingleton.instance;
     }
 
-    // Ask someone if it should be synchronized
     public synchronized boolean isBlockListEmpty() {
         return blockList.isEmpty();
     }
@@ -61,9 +58,8 @@ public class Blockchain {
         return false;
     }
 
-    // Ask someone if it should be synchronized
     @JsonIgnore
-    public synchronized Optional<Block> getLastBlock() {
+    public Optional<Block> getLastBlock() {
         if (isBlockListEmpty())
             return Optional.empty();
         return Optional.of(blockList.getLast());

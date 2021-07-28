@@ -11,8 +11,8 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
         mineController.addNewMainers(1);
-        messenger.addPeople(1);
-        TimeUnit.SECONDS.sleep(2);
+        messenger.addPeople(3);
+        TimeUnit.SECONDS.sleep(30);
         mineController.removeAllMainers();
         messenger.joinUsers();
         System.out.println(Blockchain.getInstance());

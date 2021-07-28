@@ -1,5 +1,6 @@
 package blockchain.messenger;
 
+import blockchain.cryptography.keypair.GenerateKeys;
 import blockchain.messenger.controller.MessengerController;
 
 import java.util.List;
@@ -24,15 +25,8 @@ public class Person extends Thread {
 
     @Override
     public void run() {
-        IntStream.iterate(0, x -> x < 10, x -> ++x)
-                .forEach((iterator) -> {
-                    String randomMessage = messagesGenerator.getRandomMessage();
-                    messengerController.sendNewMessage(randomMessage);
-                    try {
-                        sleep(Math.abs(ThreadLocalRandom.current().nextInt(1000)));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                });
+        GenerateKeys.generateKeysForUser();
+        String randomMessage = messagesGenerator.getRandomMessage();
+        messengerController.sendNewMessage(randomMessage);
     }
 }

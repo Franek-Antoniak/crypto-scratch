@@ -14,7 +14,6 @@ import lombok.Setter;
 import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Represents a CryptoMiner.
@@ -40,17 +39,8 @@ public class CryptoMiner extends Thread {
         isMining = false;
     }
 
-    public void awaitAndTurnDownMainer(int awaitTime) {
-        isWorking = false;
-        isMining = false;
-        try {
-            join(awaitTime);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Block mineBlock(BlockBuilder blockBuilder) {
+    private Block mineBlock(BlockBuilder blockBuilder) {
+        isMining = true;
         long startTime = new Date().getTime();
         long randomNumber;
         boolean isNotEnoughZeros;
@@ -63,22 +53,21 @@ public class CryptoMiner extends Thread {
         } while (isMining && isNotEnoughZeros);
         long secondsOfGenerating = (new Date().getTime() - startTime) / 1000;
         return blockBuilder.setGeneratingTime(secondsOfGenerating)
-                .setAuthor(Thread.currentThread()
-                        .getId())
+                .setAuthor(Thread.currentThread().getId())
                 .build();
     }
 
-    public String getShaValue(BlockBuilder blockBuilder) {
+    private String getShaValue(BlockBuilder blockBuilder) {
         StringBuilder inputBuilder = new StringBuilder();
         return StringUtil.applySha256(inputBuilder
                 .append(blockBuilder.getIndex())
                 .append(blockBuilder.getTimeStamp())
                 .append(blockBuilder.getPreviousHash())
-                .append(blockBuilder.getMagicNumber())
                 .append(blockBuilder.getGeneratingTime())
                 .append(blockBuilder.getAuthorId())
                 .append(blockBuilder.getAmountOfZeros())
                 .append(blockBuilder.getMessages())
+                .append(blockBuilder.getMagicNumber())
                 .toString());
     }
 
@@ -87,20 +76,21 @@ public class CryptoMiner extends Thread {
         isMining = false;
     }
 
-    @Override
-    public void run() {
-
+    private void initializeMiner() {
         blockchain = Blockchain.getInstance();
         isWorking = true;
-        Optional<Block> lastBlock = blockchain.getLastBlock();
-        BlockBuilder nextBlockBuilder = lastBlock.isPresent() ?
-                blockBuilderFactory.getBlockBuilder(lastBlock.get())
-                        .setMessages(messenger.getFinalMessages()) :
-                blockBuilderFactory.getBlockBuilder()
-                        .setMessages(messenger.getFinalMessages());
+    }
+
+    @Override
+    public void run() {
+        initializeMiner();
         while (isWorking) {
-            isMining = true;
+            Optional<Block> lastBlock = blockchain.getLastBlock();
+            BlockBuilder nextBlockBuilder = lastBlock.map(blockBuilderFactory::getBuilder)
+                    .orElseGet(blockBuilderFactory::getBuilder);
             Block nextBlock = mineBlock(nextBlockBuilder);
+            /* If isMining equals to true then we know that someone found new block and turned off this miner,
+            that's why we don't need to check if we should add this block to blockchain */
             if (isMining) {
                 boolean isAdded = lastBlock.map(block -> blockchain.tryAddNewBlock(nextBlock, block))
                         .orElseGet(() -> blockchain.tryAddNewBlock(nextBlock));
@@ -108,13 +98,6 @@ public class CryptoMiner extends Thread {
                     cryptoMine.stopMining();
                     messenger.safeCurrentMessages();
                 }
-            }
-            if (lastBlock != blockchain.getLastBlock() && blockchain.getLastBlock()
-                    .isPresent()) {
-                lastBlock = blockchain.getLastBlock();
-                nextBlockBuilder =
-                        blockBuilderFactory.getBlockBuilder(lastBlock.get())
-                                .setMessages(messenger.getFinalMessages());
             }
         }
     }

@@ -41,6 +41,7 @@ public class Blockchain {
             boolean isTheSameLastBlock = lastBlock.equals(blockchainLastBlock.get());
             if (isTheSameLastBlock && isEnoughZeros) {
                 blockList.add(newBlock);
+                System.out.println(newBlock);
                 return true;
             }
         }
@@ -52,6 +53,7 @@ public class Blockchain {
             boolean isEnoughZeros = BlockUtil.isEnoughZeroInHash(newBlock.getHash(), 0);
             if (isEnoughZeros) {
                 blockList.add(newBlock);
+                System.out.println(newBlock);
                 return true;
             }
         }

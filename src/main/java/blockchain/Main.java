@@ -13,8 +13,5 @@ public class Main {
     public static void main(String[] args) throws InterruptedException, InvocationTargetException {
         messenger.addNewUser();
         mineController.addNewMainers(4);
-        TimeUnit.SECONDS.sleep(200);
-        mineController.removeAllMainers();
-        System.out.println(Blockchain.getInstance());
     }
 }

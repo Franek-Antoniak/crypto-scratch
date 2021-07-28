@@ -8,7 +8,6 @@ import java.util.List;
 /**
  * Builder pattern to encapsulate creating a Block.
  */
-// TODO: 24.07.2021 I should normalize it to normal BlockBuilder
 
 @Getter
 public class BlockBuilder {

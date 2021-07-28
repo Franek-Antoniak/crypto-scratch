@@ -1,6 +1,5 @@
 package blockchain.messenger.controller;
 
-import blockchain.messenger.MessageHolder;
 import blockchain.messenger.Messenger;
 
 public class MessengerController {
@@ -19,7 +18,6 @@ public class MessengerController {
     }
 
     public void sendNewMessage(String message) {
-        MessageHolder messageHolder = new MessageHolder(message);
-        messenger.addMessage(messageHolder);
+        messenger.addMessage(message);
     }
 }

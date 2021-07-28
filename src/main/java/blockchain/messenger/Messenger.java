@@ -1,5 +1,7 @@
 package blockchain.messenger;
 
+import blockchain.cryptography.sender.Message;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,9 +11,10 @@ public class Messenger {
     private final List<MessageHolder> newMessagesHolderList = new ArrayList<>();
     private List<MessageHolder> finalList = new ArrayList<>();
     private List<Person> listOfUsers;
+    private volatile long counterId = 1;
 
     private Messenger() {
-
+        /*Blockchain.getInstance().getLastIdOfMessage();*/
     }
 
     public static Messenger getInstance() {
@@ -25,8 +28,19 @@ public class Messenger {
                 .collect(Collectors.toList());
     }
 
-    public synchronized void addMessage(MessageHolder message) {
-        newMessagesHolderList.add(message);
+    public synchronized void addMessage(String message) {
+        MessageHolder.Decrypted messageDecrypted = new MessageHolder.Decrypted(message, counterId++);
+        MessageHolder messageHolder;
+        List<byte[]> encryptedMessage;
+        try {
+            encryptedMessage = Message.getEncryptedData(messageDecrypted.toString());
+            messageHolder = new MessageHolder(encryptedMessage, messageDecrypted.id);
+        } catch (Exception e) {
+            System.err.println("Error while encrypting data for user: " + Thread.currentThread().getName());
+            e.printStackTrace();
+            return;
+        }
+        newMessagesHolderList.add(messageHolder);
     }
 
     public synchronized void safeCurrentMessages() {

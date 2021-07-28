@@ -99,11 +99,13 @@ public class CryptoMiner extends Thread {
         while (isWorking) {
             isMining = true;
             Block nextBlock = mineBlock(nextBlockBuilder);
-            boolean isAdded = lastBlock.map(block -> blockchain.tryAddNewBlock(nextBlock, block))
-                    .orElseGet(() -> blockchain.tryAddNewBlock(nextBlock));
-            if (isAdded) {
-                cryptoMine.stopMining();
-                messenger.safeCurrentMessages();
+            if (isMining) {
+                boolean isAdded = lastBlock.map(block -> blockchain.tryAddNewBlock(nextBlock, block))
+                        .orElseGet(() -> blockchain.tryAddNewBlock(nextBlock));
+                if (isAdded) {
+                    cryptoMine.stopMining();
+                    messenger.safeCurrentMessages();
+                }
             }
             if (lastBlock != blockchain.getLastBlock() && blockchain.getLastBlock()
                     .isPresent()) {

@@ -1,5 +1,7 @@
 package blockchain.cryptography.sender;
 
+import org.w3c.dom.events.EventException;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.security.InvalidKeyException;

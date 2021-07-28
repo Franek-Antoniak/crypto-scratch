@@ -1,5 +1,6 @@
 package blockchain.block;
 
+import blockchain.messenger.Messenger;
 import lombok.Data;
 
 import java.util.Date;
@@ -9,13 +10,14 @@ import java.util.Date;
  */
 @Data
 public class BlockBuilderFactory {
+    private final Messenger messenger = Messenger.getInstance();
     /**
      * Private method to mine new Block in BlockChain based on previous Block
      *
      * @param previousBlock Previous block in Blockchain
      * @return new BlockBuilder
      */
-    public BlockBuilder getBlockBuilder(Block previousBlock) {
+    public BlockBuilder getBuilder(Block previousBlock) {
         long amountOfZeros = previousBlock.getAmountOfZeros();
         long generatingTime = previousBlock.getGeneratingTime();
         if (generatingTime > 60)
@@ -26,7 +28,8 @@ public class BlockBuilderFactory {
                 .setPreviousHash(previousBlock.getHash())
                 .setIndex(previousBlock.getIndex() + 1)
                 .setAmountOfZeros(amountOfZeros)
-                .setTimeStamp(new Date().getTime());
+                .setTimeStamp(new Date().getTime())
+                .setMessages(messenger.getFinalMessages());
     }
 
     /**
@@ -34,11 +37,12 @@ public class BlockBuilderFactory {
      *
      * @return new BlockBuilder
      */
-    public BlockBuilder getBlockBuilder() {
+    public BlockBuilder getBuilder() {
         return new BlockBuilder()
                 .setPreviousHash("0")
                 .setIndex(1)
                 .setAmountOfZeros(0)
-                .setTimeStamp(new Date().getTime());
+                .setTimeStamp(new Date().getTime())
+                .setMessages(messenger.getFinalMessages());
     }
 }

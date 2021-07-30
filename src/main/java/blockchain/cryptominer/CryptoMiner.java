@@ -1,4 +1,4 @@
-package blockchain.miner;
+package blockchain.cryptominer;
 
 import blockchain.Blockchain;
 import blockchain.block.Block;
@@ -6,14 +6,16 @@ import blockchain.block.BlockBuilder;
 import blockchain.block.BlockBuilderFactory;
 import blockchain.block.util.BlockUtil;
 import blockchain.messenger.Messenger;
-import blockchain.mine.CryptoMine;
+import blockchain.cryptomine.CryptoMine;
 import blockchain.util.StringUtil;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 
 import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Represents a CryptoMiner.
@@ -81,10 +83,12 @@ public class CryptoMiner extends Thread {
         isWorking = true;
     }
 
+    @SneakyThrows
     @Override
     public void run() {
         initializeMiner();
         while (isWorking) {
+            TimeUnit.SECONDS.sleep(8);
             Optional<Block> lastBlock = blockchain.getLastBlock();
             BlockBuilder nextBlockBuilder = lastBlock.map(blockBuilderFactory::getBuilder)
                     .orElseGet(blockBuilderFactory::getBuilder);

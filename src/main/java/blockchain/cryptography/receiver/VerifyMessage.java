@@ -1,34 +1,45 @@
 package blockchain.cryptography.receiver;
 
+import blockchain.messenger.MessageHolder;
+import blockchain.util.StringUtil;
+
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class VerifyMessage {
-    private List<byte[]> list;
+    private List<byte[]> list = new ArrayList<>();
     String keyFile;
+    String author;
+    String message;
+    String hexSign;
 
-    @SuppressWarnings("unchecked")
     //The constructor of VerifyMessage class retrieves the byte arrays from the File
     //and prints the message only if the signature is verified.
-    public VerifyMessage(String author) throws Exception {
-        String tempFileName = "MyData/" + author + "/SignedData.txt";
+    public VerifyMessage(MessageHolder messageHolder) {
+        this.author = messageHolder.getAuthor();
+        this.message = messageHolder.getMessageData();
+        this.hexSign = messageHolder.getSign();
         this.keyFile = "MyKeys/" + author + "/publicKey";
-        ObjectInputStream in = new ObjectInputStream(new FileInputStream(tempFileName));
-        this.list = (List<byte[]>) in.readObject();
-        in.close();
+        list.add(message.getBytes(StandardCharsets.UTF_8));
+        list.add(StringUtil.hexStringToByteArray(hexSign));
     }
 
-    public Optional<String> getVerifiedMessage() throws Exception {
-        boolean verified = verifySignature(list.get(0), list.get(1), keyFile);
-        return verified ? Optional.of(new String(list.get(0))) : Optional.empty();
+
+
+    public boolean isMessageVerified() {
+        try {
+            return verifySignature(list.get(0), list.get(1), keyFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     //Method for signature verification that initializes with the Public Key,

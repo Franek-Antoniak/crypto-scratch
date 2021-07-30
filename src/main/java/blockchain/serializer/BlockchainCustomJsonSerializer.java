@@ -3,6 +3,7 @@ package blockchain.serializer;
 import blockchain.Blockchain;
 import blockchain.block.Block;
 import blockchain.block.BlockBuilder;
+import blockchain.serializer.exception.DeserializationValidationException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.core.type.TypeReference;

@@ -1,6 +1,6 @@
-package blockchain.mine.facade;
+package blockchain.cryptomine.facade;
 
-import blockchain.mine.CryptoMine;
+import blockchain.cryptomine.CryptoMine;
 
 public class MineFacade {
     private final CryptoMine cryptoMine = CryptoMine.getInstance();

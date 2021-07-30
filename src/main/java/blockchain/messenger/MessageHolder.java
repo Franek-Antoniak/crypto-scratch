@@ -2,9 +2,11 @@ package blockchain.messenger;
 
 import blockchain.util.StringUtil;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.List;
 
+@Getter
 public class MessageHolder {
     private final String author;
     private final String messageData;

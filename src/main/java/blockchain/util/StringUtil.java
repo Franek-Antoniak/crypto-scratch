@@ -34,7 +34,7 @@ public class StringUtil {
         return new String(hexChars);
     }
 
-    public static byte[] decodeHexString(String hexString) {
+    public static byte[] hexStringToByteArray(String hexString) {
         if (hexString.length() % 2 == 1) {
             throw new IllegalArgumentException(
                     "Invalid hexadecimal String supplied.");

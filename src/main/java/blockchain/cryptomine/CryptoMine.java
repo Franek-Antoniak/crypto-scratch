@@ -1,6 +1,6 @@
-package blockchain.mine;
+package blockchain.cryptomine;
 
-import blockchain.miner.CryptoMiner;
+import blockchain.cryptominer.CryptoMiner;
 import lombok.Data;
 
 import java.util.Comparator;

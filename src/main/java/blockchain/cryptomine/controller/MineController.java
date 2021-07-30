@@ -1,6 +1,6 @@
-package blockchain.mine.controller;
+package blockchain.cryptomine.controller;
 
-import blockchain.mine.facade.MineFacade;
+import blockchain.cryptomine.facade.MineFacade;
 
 public class MineController {
     private final MineFacade mainersFacade = MineFacade.getInstance();

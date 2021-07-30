@@ -2,10 +2,10 @@ package blockchain;
 
 import blockchain.block.Block;
 import blockchain.block.util.BlockUtil;
-import blockchain.mine.CryptoMine;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Optional;
@@ -19,6 +19,11 @@ public class Blockchain {
     private final LinkedList<Block> blockList = new LinkedList<>();
 
     private Blockchain() {
+    }
+
+    @JsonIgnore
+    public ArrayList<Block> getCopyOfMessages() {
+        return new ArrayList<>(blockList);
     }
 
     private static class BlockChainSingleton {

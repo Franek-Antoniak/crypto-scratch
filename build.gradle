@@ -17,15 +17,18 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
-    // HYPERSKILL
-    testImplementation 'com.github.hyperskill:hs-test:release-SNAPSHOT'
     // JSON OBJECT MAPPER
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.6.1'
     // OBJECT MAPPER
     implementation 'org.mapstruct:mapstruct:1.4.2.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
     // BASE64
-    implementation group: 'commons-codec', name: 'commons-codec', version: '1.9'
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.13'
+    // SPRING BOOT
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {

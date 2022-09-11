@@ -1,14 +1,19 @@
 plugins {
+    id 'org.springframework.boot' version '3.0.0-SNAPSHOT'
+    id 'io.spring.dependency-management' version '1.0.13.RELEASE'
     id 'java'
 }
 
+
 group = 'blockchain'
-version '1.0-SNAPSHOT'
-sourceCompatibility = '11'
+version '1.0'
+sourceCompatibility = 17
+targetCompatibility = 17
 
 repositories {
     mavenCentral()
-    maven { url "https://jitpack.io" }
+    maven { url 'https://repo.spring.io/milestone' }
+    maven { url 'https://repo.spring.io/snapshot' }
 }
 
 dependencies {
@@ -29,10 +34,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {
-//	useJUnitPlatform()
+    useJUnitPlatform()
     systemProperty "file.encoding", "utf-8"
 }
 

@@ -13,15 +13,15 @@ repositories {
 
 dependencies {
     // LOMBOK - ANNOTATIONS
-    testCompileOnly 'org.projectlombok:lombok:1.18.20'
-    compileOnly 'org.projectlombok:lombok:1.18.20'
-    annotationProcessor 'org.projectlombok:lombok:1.18.20'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
+    testCompileOnly 'org.projectlombok:lombok:1.18.24'
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
     // JSON OBJECT MAPPER
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.6.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.4'
     // OBJECT MAPPER
-    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+    implementation 'org.mapstruct:mapstruct:1.5.2.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
     // BASE64
     implementation group: 'commons-codec', name: 'commons-codec', version: '1.13'
     // SPRING BOOT

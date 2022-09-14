@@ -1,19 +1,21 @@
 plugins {
-    id 'org.springframework.boot' version '3.0.0-SNAPSHOT'
+    id 'org.springframework.boot' version '2.7.3'
     id 'io.spring.dependency-management' version '1.0.13.RELEASE'
     id 'java'
 }
 
+group = 'frank.antoniak'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
 
-group = 'blockchain'
-version '1.0'
-sourceCompatibility = 17
-targetCompatibility = 17
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
 
 repositories {
     mavenCentral()
-    maven { url 'https://repo.spring.io/milestone' }
-    maven { url 'https://repo.spring.io/snapshot' }
 }
 
 dependencies {
@@ -31,9 +33,28 @@ dependencies {
     implementation group: 'commons-codec', name: 'commons-codec', version: '1.13'
     // SPRING BOOT
     implementation 'org.springframework.boot:spring-boot-starter-web'
-//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    // JPA + Hibernate
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // Thymeleaf
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    // Spring-web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    // Dev Tools
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    // H2
+    runtimeOnly 'com.h2database:h2'
+    // Mysql
+    runtimeOnly 'mysql:mysql-connector-java'
+    // Tests
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {

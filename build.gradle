@@ -1,12 +1,12 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.3'
-    id 'io.spring.dependency-management' version '1.0.13.RELEASE'
+    id 'org.springframework.boot' version '2.7.5'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id 'java'
 }
 
-group = 'frank.antoniak'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+group = "crypto.scratch"
+version = "0.0.1-SNAPSHOT"
+sourceCompatibility = 17
 
 configurations {
     compileOnly {
@@ -18,48 +18,22 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    // LOMBOK - ANNOTATIONS
-    testCompileOnly 'org.projectlombok:lombok:1.18.24'
-    compileOnly 'org.projectlombok:lombok:1.18.24'
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
-    // JSON OBJECT MAPPER
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.4'
-    // OBJECT MAPPER
-    implementation 'org.mapstruct:mapstruct:1.5.2.Final'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
-    // BASE64
-    implementation group: 'commons-codec', name: 'commons-codec', version: '1.13'
-    // SPRING BOOT
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-test'
+sourceSets.main.resources.srcDirs = ["src/main/resources"]
 
-    // Actuator
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    // JPA + Hibernate
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    // Thymeleaf
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    // Spring-web
+
+dependencies {
+    implementation 'commons-codec:commons-codec:1.15'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    // Lombok
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    // Dev Tools
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    // H2
-    runtimeOnly 'com.h2database:h2'
-    // Mysql
-    runtimeOnly 'mysql:mysql-connector-java'
-    // Tests
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.72'
+    implementation 'org.hibernate.validator:hibernate-validator'
 }
 
 test {
     useJUnitPlatform()
-    systemProperty "file.encoding", "utf-8"
 }
+
 
 
